@@ -1,0 +1,16 @@
+{
+  "name": "network-web-tools",
+  "private": true,
+  "version": "0.1.0",
+  "type": "module",
+  "scripts": {
+    "dev": "pnpm -r --parallel dev",
+    "build": "pnpm -r build",
+    "preview": "pnpm -r preview",
+    "dev:client": "pnpm --filter sichere-netzwerk-tools-suite dev",
+    "dev:api": "pnpm --filter network-tools-backend dev"
+  },
+  "devDependencies": {
+    "typescript": "~5.8.2"
+  }
+}

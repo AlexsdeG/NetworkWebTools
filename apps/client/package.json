@@ -1,0 +1,29 @@
+{
+  "name": "sichere-netzwerk-tools-suite",
+  "private": true,
+  "version": "0.0.0",
+  "type": "module",
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build",
+    "preview": "vite preview"
+  },
+  "dependencies": {
+    "react": "^19.2.4",
+    "react-dom": "^19.2.4",
+    "lucide-react": "^0.563.0",
+    "@testing-library/react": "^16.3.2",
+    "react-router-dom": "^7.13.0",
+    "react-i18next": "^16.5.4",
+    "i18next": "^25.8.3",
+    "axios": "1.6.8",
+    "@tanstack/react-query": "^5.66.0",
+    "sonner": "1.4.41"
+  },
+  "devDependencies": {
+    "@types/node": "^22.14.0",
+    "@vitejs/plugin-react": "^5.0.0",
+    "typescript": "~5.8.2",
+    "vite": "^6.2.0"
+  }
+}

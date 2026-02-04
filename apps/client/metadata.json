@@ -1,0 +1,5 @@
+{
+  "name": "Sichere Netzwerk-Tools Suite",
+  "description": "Eine private, selbst gehostete Suite für Netzwerkdiagnosen, einschließlich Port-Scanning, IP-Metadatenanalyse und SMTP-Server-Tests.",
+  "requestFramePermissions": []
+}

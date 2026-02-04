@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="de">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Sichere Netzwerk-Tools Suite</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+      tailwind.config = {
+        darkMode: 'class',
+        theme: {
+          extend: {
+            colors: {
+              background: '#0f172a', // slate-900
+              surface: '#1e293b',    // slate-800
+              primary: '#3b82f6',    // blue-500
+              secondary: '#64748b',  // slate-500
+            }
+          }
+        }
+      }
+    </script>
+  <script type="importmap">
+{
+  "imports": {
+    "react": "https://esm.sh/react@^19.2.4",
+    "react/": "https://esm.sh/react@^19.2.4/",
+    "react-dom/": "https://esm.sh/react-dom@^19.2.4/",
+    "lucide-react": "https://esm.sh/lucide-react@^0.563.0",
+    "@testing-library/react": "https://esm.sh/@testing-library/react@^16.3.2",
+    "react-router-dom": "https://esm.sh/react-router-dom@^7.13.0",
+    "react-i18next": "https://esm.sh/react-i18next@^16.5.4",
+    "i18next": "https://esm.sh/i18next@^25.8.3",
+    "axios": "https://esm.sh/axios@1.6.8",
+    "@tanstack/react-query": "https://esm.sh/@tanstack/react-query@^5.66.0",
+    "sonner": "https://esm.sh/sonner@1.4.41"
+  }
+}
+</script>
+<link rel="stylesheet" href="/index.css">
+</head>
+  <body class="bg-background text-slate-200 antialiased">
+    <div id="root"></div>
+  <script type="module" src="/index.tsx"></script>
+</body>
+</html>
