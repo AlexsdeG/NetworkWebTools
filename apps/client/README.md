@@ -1,20 +1,35 @@
-<div align="center">
-<img width="1200" height="475" alt="GHBanner" src="https://github.com/user-attachments/assets/0aa67016-6eaf-458a-adb2-6e31a0763ed6" />
-</div>
+# NetworkWebTools - Client 💻
 
-# Run and deploy your AI Studio app
+A sleek, intuitive, and modern React-based frontend for the NetworkWebTools suite.
 
-This contains everything you need to run your app locally.
+## ✨ Features
 
-View your app in AI Studio: https://ai.studio/apps/drive/1KwF_5IosuGwep_uDoxbImQECZAph9LnW
+- **📊 Dashboard**: Unified overview of all diagnostic tools.
+- **🔍 Port Scanner UI**: Interactive interface to start and monitor network scans.
+- **✉️ SMTP Test Tool**: Easy-to-use form for testing mail server configurations.
+- **📍 IP Info Hub**: Detailed geolocation and network info visualization.
+- **🎨 Modern UI**: Built with `Lucide React` icons and `Sonner` notifications for a premium experience.
+- **🌍 Internationalization**: Ready for multiple languages using `i18next`.
 
-## Run Locally
+## 🛠️ Tech Stack
 
-**Prerequisites:**  Node.js
+- **Framework**: React 19 (Vite)
+- **Icons**: Lucide React
+- **Data Fetching**: Axios & React Query (TanStack Query)
+- **State Management**: React Hooks
+- **Styling**: Tailwind CSS / Vanilla CSS
 
+## 🏃 Getting Started
 
-1. Install dependencies:
-   `npm install`
-2. Set the `GEMINI_API_KEY` in [.env.local](.env.local) to your Gemini API key
-3. Run the app:
-   `npm run dev`
+### Prerequisites
+
+Ensure the [API](../api) is running if you want to perform real scans and tests.
+
+### Scripts
+
+- `pnpm dev`: Start the development server (default: http://localhost:3000).
+- `pnpm build`: Create an optimized production build.
+- `pnpm preview`: Locally preview the production build.
+
+---
+*Part of the NetworkWebTools Suite.*
