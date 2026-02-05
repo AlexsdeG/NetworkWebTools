@@ -7,8 +7,12 @@ interface SmtpFormVariables {
   host: string;
   port: string;
   user?: string;
-  password?: string;
+  pass?: string; // Updated to match latest SmtpForm state
   secure: boolean;
+  sendEmail?: boolean;
+  to?: string;
+  subject?: string;
+  text?: string;
 }
 
 export const useSmtp = () => {
@@ -21,8 +25,12 @@ export const useSmtp = () => {
         host: formData.host,
         port: parseInt(formData.port, 10) || 587,
         user: formData.user || '',
-        pass: formData.password || '',
-        secure: formData.secure
+        pass: formData.pass || '',
+        secure: formData.secure,
+        sendEmail: formData.sendEmail,
+        to: formData.to,
+        subject: formData.subject,
+        text: formData.text
       };
       return await toolsApi.testSmtp(config);
     },

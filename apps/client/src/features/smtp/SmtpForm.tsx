@@ -8,7 +8,7 @@ interface SmtpConfig {
   host: string;
   port: string;
   user: string;
-  password?: string;
+  pass?: string;
   secure: boolean;
   sendEmail?: boolean;
   to?: string;
@@ -66,8 +66,8 @@ export const SmtpForm: React.FC<SmtpFormProps> = ({ config, setConfig, onSubmit,
       <Input
         label={t('smtp.password')}
         type="password"
-        value={config.password}
-        onChange={e => setConfig({ ...config, password: e.target.value })}
+        value={config.pass}
+        onChange={e => setConfig({ ...config, pass: e.target.value })}
         disabled={isLoading}
       />
       

@@ -43,6 +43,10 @@ export interface SmtpConfig {
   user: string;
   pass: string;
   secure: boolean;
+  sendEmail?: boolean;
+  to?: string;
+  subject?: string;
+  text?: string;
 }
 
 export const toolsApi = {

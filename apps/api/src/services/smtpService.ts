@@ -5,6 +5,7 @@ export interface SmtpResult {
   success: boolean;
   message: string;
   details?: any;
+  logs?: string[];
 }
 
 /**
@@ -12,6 +13,12 @@ export interface SmtpResult {
  * Nutzt 'nodemailer' um einen Handshake durchzuführen, ohne eine E-Mail zu senden.
  */
 export const verifyConnection = async (config: SmtpRequest): Promise<SmtpResult> => {
+  const logs: string[] = [];
+  const log = (msg: string) => {
+    console.log(`[SMTP] ${msg}`);
+    logs.push(msg);
+  };
+
   // Transporter Konfiguration erstellen
   const transporter = nodemailer.createTransport({
     host: config.host,
@@ -29,26 +36,44 @@ export const verifyConnection = async (config: SmtpRequest): Promise<SmtpResult>
   });
 
   try {
+    log(`Teste Verbindung zu ${config.host}:${config.port} (Secure: ${config.secure})`);
+    
     // Führt den SMTP Handshake durch (EHLO -> AUTH -> QUIT)
     await transporter.verify();
+    log('Handshake erfolgreich.');
 
     // Wenn E-Mail-Versand gewünscht ist
     if (config.sendEmail && config.to) {
+      log(`Sende Test-E-Mail an ${config.to}...`);
+      
+      const fromAddress = config.user || 'test@networktools.local';
+      
       const info = await transporter.sendMail({
-        from: config.user || 'test@example.com',
+        from: fromAddress,
         to: config.to,
         subject: config.subject || 'NetTools SMTP Test',
         text: config.text || 'Wenn Sie diese E-Mail lesen können, funktioniert Ihre SMTP-Konfiguration!',
       });
+      
+      log(`E-Mail erfolgreich gesendet. MessageID: ${info.messageId}`);
+      
       return { 
         success: true, 
         message: 'Verbindung erfolgreich und Test-E-Mail gesendet.',
-        details: { messageId: info.messageId }
+        details: { messageId: info.messageId, from: fromAddress },
+        logs
       };
     }
 
-    return { success: true, message: 'Verbindung zum SMTP-Server erfolgreich hergestellt.' };
+    return { 
+      success: true, 
+      message: 'Verbindung zum SMTP-Server erfolgreich hergestellt.',
+      logs
+    };
   } catch (error: any) {
+    log(`Fehler: ${error.message}`);
+    console.error('[SMTP] Full Error:', error);
+    
     let message = 'Verbindung fehlgeschlagen.';
     
     // Fehlercodes übersetzen
@@ -59,13 +84,16 @@ export const verifyConnection = async (config: SmtpRequest): Promise<SmtpResult>
     } else if (error.code === 'ENOTFOUND') {
       message = 'Server nicht gefunden. Hostname überprüfen.';
     } else if (error.code === 'ESOCKET') {
-        message = 'Socket-Fehler. Verbindung unterbrochen.';
+      message = 'Socket-Fehler. Verbindung unterbrochen oder Server lehnt Verbindung ab.';
+    } else if (error.code === 'ECONNREFUSED') {
+      message = 'Verbindung abgelehnt. Läuft der SMTP-Server auf dem Ziel-Port?';
     }
 
     return { 
       success: false, 
       message,
-      details: error.message || error.response
+      details: error.message || error.response || 'Unbekannter Fehler',
+      logs
     };
   }
 };

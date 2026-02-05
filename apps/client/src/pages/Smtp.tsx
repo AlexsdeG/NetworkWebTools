@@ -12,7 +12,7 @@ export const Smtp: React.FC = () => {
     host: 'smtp.gmail.com',
     port: '587',
     user: '',
-    password: '',
+    pass: '',
     secure: false,
     sendEmail: false,
     to: '',
