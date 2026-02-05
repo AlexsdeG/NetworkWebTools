@@ -13,7 +13,7 @@ app.use(helmet() as any);
 
 // CORS Konfiguration (Erlaubt Frontend Zugriff)
 app.use(cors({
-  origin: process.env.NODE_ENV === 'production' ? false : 'http://localhost:5173', // Vite Default Port
+  origin: process.env.CORS_ORIGIN || 'http://localhost:3000',
   methods: ['GET', 'POST', 'PUT', 'DELETE'],
   allowedHeaders: ['Content-Type', 'Authorization']
 }) as any);

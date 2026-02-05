@@ -61,10 +61,12 @@ export const de = {
     loading: "Lade IP-Daten...",
     details: "Details",
     map: "Kartenansicht",
+    noGeoData: "Keine Geodaten verfügbar",
     fields: {
       ip: "IP Adresse",
       type: "Typ",
       location: "Standort",
+      country: "Land",
       isp: "Internetanbieter",
       timezone: "Zeitzone"
     }

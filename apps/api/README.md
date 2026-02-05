@@ -35,7 +35,10 @@ PORT=3010
 NODE_ENV=development
 JWT_SECRET=your_super_secret_key
 ADMIN_PASS_HASH=your_bcrypt_hashed_admin_password
+CORS_ORIGIN=http://localhost:3000
 ```
+
+npx bcryptjs hash "your-desired-password"
 
 ### Scripts
 

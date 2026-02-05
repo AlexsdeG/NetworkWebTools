@@ -1,5 +1,5 @@
 import React, { createContext, useContext, useState, useEffect } from 'react';
-import { AuthContextType, User } from '../types';
+import { AuthContextType, User } from '../../types';
 import { storage } from '../utils/storage';
 import { authApi } from '../api/auth';
 
@@ -10,11 +10,17 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
   const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
-    const initAuth = () => {
+    const initAuth = async () => {
       const storedToken = storage.getToken();
       if (storedToken) {
-        // In a real app, we might verify this token with the backend here
-        setUser({ role: 'admin', token: storedToken });
+        try {
+          // Verify the token with the backend
+          await authApi.verify();
+          setUser({ role: 'admin', token: storedToken });
+        } catch (error) {
+          // Token invalid or expired, clear it
+          storage.removeToken();
+        }
       }
       setIsLoading(false);
     };

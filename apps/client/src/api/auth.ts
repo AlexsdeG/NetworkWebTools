@@ -1,23 +1,29 @@
 import { apiClient } from './client';
 
-// Interface for API response
+// Interface for API responses
 interface LoginResponse {
   token: string;
 }
 
+interface VerifyResponse {
+  status: string;
+  user: { role: string };
+}
+
 export const authApi = {
+  /**
+   * Authenticate with password and receive JWT token.
+   */
   login: async (password: string): Promise<LoginResponse> => {
-    // Phase 0/1: Mock implementation until backend is ready
-    // In strict Phase 3+, this would be: return apiClient.post('/auth/login', { password });
-    
-    return new Promise((resolve, reject) => {
-      setTimeout(() => {
-        if (password === 'admin') {
-          resolve({ token: 'mock-jwt-token-123-secure' });
-        } else {
-          reject(new Error('Invalid credentials'));
-        }
-      }, 800);
-    });
+    const response = await apiClient.post<LoginResponse>('/auth/login', { password });
+    return response.data;
+  },
+
+  /**
+   * Verify if the current stored token is still valid.
+   */
+  verify: async (): Promise<VerifyResponse> => {
+    const response = await apiClient.get<VerifyResponse>('/auth/verify');
+    return response.data;
   }
 };

@@ -1,16 +1,26 @@
 import React from 'react';
 import { useTranslation } from 'react-i18next';
-import { MapPin, Clock, Server } from 'lucide-react';
+import { MapPin, Clock, Server, Globe } from 'lucide-react';
 import { Card } from '../../components/ui/Card';
 import { IpMap } from './IpMap';
-import { IpInfo } from '../../api/tools';
+import { IpResponse } from '../../api/tools';
 
 interface IpDetailsProps {
-  data: IpInfo;
+  data: IpResponse;
 }
 
 export const IpDetails: React.FC<IpDetailsProps> = ({ data }) => {
   const { t } = useTranslation();
+
+  // Extract geo data with fallbacks
+  const geo = data.geo;
+  const location = geo 
+    ? [geo.city, geo.region, geo.country].filter(Boolean).join(', ') || 'Unknown'
+    : 'Localhost / Private IP';
+  const lat = geo?.ll?.[0] ?? 0;
+  const lon = geo?.ll?.[1] ?? 0;
+  const timezone = geo?.timezone ?? 'N/A';
+  const ipType = data.ip.includes(':') ? 'IPv6' : 'IPv4';
 
   return (
     <div className="space-y-6 animate-in fade-in slide-in-from-bottom-4 duration-500">
@@ -25,7 +35,7 @@ export const IpDetails: React.FC<IpDetailsProps> = ({ data }) => {
             {data.ip}
           </div>
           <span className="inline-flex items-center px-3 py-1 rounded-full text-sm font-medium bg-primary/10 text-primary border border-primary/20">
-            {data.type}
+            {ipType}
           </span>
         </div>
       </Card>
@@ -40,20 +50,22 @@ export const IpDetails: React.FC<IpDetailsProps> = ({ data }) => {
               </div>
               <h3 className="text-lg font-medium text-white">{t('ip.fields.location')}</h3>
             </div>
-            <p className="text-xl text-slate-200 pl-12">{data.location}</p>
-            <div className="mt-2 pl-12 text-sm text-slate-500 font-mono">
-              {data.lat.toFixed(4)}, {data.lon.toFixed(4)}
-            </div>
+            <p className="text-xl text-slate-200 pl-12">{location}</p>
+            {geo?.ll && (
+              <div className="mt-2 pl-12 text-sm text-slate-500 font-mono">
+                {lat.toFixed(4)}, {lon.toFixed(4)}
+              </div>
+            )}
           </Card>
 
           <Card className="transition-colors hover:bg-slate-800/50">
             <div className="flex items-center mb-3">
               <div className="p-2 bg-purple-500/10 rounded-lg mr-3">
-                <Server className="h-5 w-5 text-purple-400" />
+                <Globe className="h-5 w-5 text-purple-400" />
               </div>
-              <h3 className="text-lg font-medium text-white">{t('ip.fields.isp')}</h3>
+              <h3 className="text-lg font-medium text-white">{t('ip.fields.country')}</h3>
             </div>
-            <p className="text-xl text-slate-200 pl-12">{data.isp}</p>
+            <p className="text-xl text-slate-200 pl-12">{geo?.country ?? 'N/A'}</p>
           </Card>
 
           <Card className="transition-colors hover:bg-slate-800/50">
@@ -63,12 +75,18 @@ export const IpDetails: React.FC<IpDetailsProps> = ({ data }) => {
               </div>
               <h3 className="text-lg font-medium text-white">{t('ip.fields.timezone')}</h3>
             </div>
-            <p className="text-xl text-slate-200 pl-12">{data.timezone}</p>
+            <p className="text-xl text-slate-200 pl-12">{timezone}</p>
           </Card>
         </div>
 
         <div className="min-h-[300px] lg:min-h-0">
-          <IpMap lat={data.lat} lon={data.lon} />
+          {geo?.ll ? (
+            <IpMap lat={lat} lon={lon} />
+          ) : (
+            <Card className="h-full flex items-center justify-center">
+              <p className="text-slate-400">{t('ip.noGeoData')}</p>
+            </Card>
+          )}
         </div>
       </div>
     </div>

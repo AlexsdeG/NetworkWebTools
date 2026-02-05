@@ -1,82 +1,90 @@
 import { apiClient } from './client';
 
-// Types
+// Types aligned with backend responses
 export interface ScanResult {
   port: number;
-  status: 'open' | 'closed';
+  status: 'open' | 'closed' | 'timeout';
   service?: string;
+  banner?: string;
 }
 
-export interface IpInfo {
+export interface ScanResponse {
+  target: string;
+  scanResults: ScanResult[];
+}
+
+export interface GeoData {
+  range?: [number, number];
+  country?: string;
+  region?: string;
+  eu?: string;
+  timezone?: string;
+  city?: string;
+  ll?: [number, number];
+  metro?: number;
+  area?: number;
+}
+
+export interface IpResponse {
   ip: string;
-  type: string;
-  location: string;
-  isp: string;
-  timezone: string;
-  lat: number;
-  lon: number;
+  geo: GeoData | null;
 }
 
 export interface SmtpResponse {
   success: boolean;
-  logs: string[];
+  message?: string;
+  errorCode?: string;
+  logs?: string[];
 }
 
-// Mock API Implementation
+export interface SmtpConfig {
+  host: string;
+  port: number;
+  user: string;
+  pass: string;
+  secure: boolean;
+}
+
 export const toolsApi = {
+  /**
+   * Scan ports on a target IP address.
+   * @param target - Target IP address to scan
+   * @param ports - Comma-separated port list (e.g., "80,443,8080") or preset like "common", "web"
+   */
   scanPorts: async (target: string, ports: string): Promise<ScanResult[]> => {
-    return new Promise((resolve) => {
-      setTimeout(() => {
-        const portList = ports === 'common' 
-          ? [21, 22, 23, 25, 53, 80, 110, 135, 139, 143, 443, 445, 993, 995, 1433, 3306, 3389, 5900, 8080] 
-          : ports === 'web' ? [80, 443, 8080, 8443] : [80, 443];
-        
-        const results: ScanResult[] = portList.map(port => ({
-          port,
-          status: Math.random() > 0.7 ? 'open' : 'closed',
-          service: 'unknown'
-        }));
-        resolve(results);
-      }, 1500);
+    // Convert preset names to actual port lists for backend
+    let portList: string;
+    switch (ports) {
+      case 'common':
+        portList = '21,22,23,25,53,80,110,135,139,143,443,445,993,995,1433,3306,3389,5900,8080';
+        break;
+      case 'web':
+        portList = '80,443,8080,8443';
+        break;
+      default:
+        portList = ports;
+    }
+
+    const response = await apiClient.post<ScanResponse>('/tools/scan-ports', { 
+      target, 
+      ports: portList 
     });
+    return response.data.scanResults;
   },
 
-  getIpInfo: async (): Promise<IpInfo> => {
-    return new Promise((resolve) => {
-      setTimeout(() => {
-        resolve({
-          ip: '203.0.113.45',
-          type: 'IPv4',
-          location: 'Berlin, Deutschland',
-          isp: 'Deutsche Telekom AG',
-          timezone: 'Europe/Berlin',
-          lat: 52.5200,
-          lon: 13.4050
-        });
-      }, 1000);
-    });
+  /**
+   * Get the requester's public IP address and geo-metadata.
+   */
+  getIpInfo: async (): Promise<IpResponse> => {
+    const response = await apiClient.get<IpResponse>('/tools/my-ip');
+    return response.data;
   },
 
-  testSmtp: async (config: any): Promise<SmtpResponse> => {
-    return new Promise((resolve, reject) => {
-      setTimeout(() => {
-        if (config.host.includes('error')) {
-          reject(new Error('Connection timed out'));
-        } else {
-          resolve({
-            success: true,
-            logs: [
-              `Connecting to ${config.host}:${config.port}...`,
-              'Socket connected.',
-              'Initiating handshake...',
-              'TLS negotiation successful.',
-              'Authenticating user...',
-              'Authentication successful.',
-              'Closing connection.'
-            ]
-          });
-        }
-      }, 2000);
-    });
+  /**
+   * Test SMTP server connectivity and authentication.
+   */
+  testSmtp: async (config: SmtpConfig): Promise<SmtpResponse> => {
+    const response = await apiClient.post<SmtpResponse>('/tools/test-smtp', config);
+    return response.data;
   }
 };
