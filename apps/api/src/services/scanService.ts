@@ -16,28 +16,33 @@ export const scanTarget = (target: string, ports: string): Promise<ScanResult[]>
     const options = {
       target,
       port: ports,
-      status: 'O', // Nur offene Ports
-      banner: true,
-      timeout: 2000 // Hardcoded Timeout wie im Plan
+      status: 'TRO', // Timeout, Refused, Open
+      banner: false, // Banner fetching often causes timeouts on high ports/silent services
+      timeout: 5000 
     };
 
+    console.log(`Starte Scan auf ${target} für Ports: ${ports}`);
     const results: ScanResult[] = [];
     
     // Evilscan Instanz erstellen
     const scanner = new Evilscan(options);
 
     scanner.on('result', (data) => {
-      // Wir sammeln nur offene Ports (wobei status:'O' das schon filtern sollte)
-      if (data.status === 'open') {
-        results.push({
-          port: data.port,
-          status: data.status,
-          banner: data.banner
-        });
-      }
+      console.log(`Scan Ergebnis für ${data.port}: ${data.status}`);
+      
+      let status: 'open' | 'closed' | 'timeout' = 'closed';
+      if (data.status === 'open') status = 'open';
+      else if (data.status.includes('timeout')) status = 'timeout';
+      
+      results.push({
+        port: data.port,
+        status,
+        banner: data.banner
+      });
     });
 
     scanner.on('error', (err) => {
+      console.error(`Evilscan Fehler: ${err.message}`);
       // Bei Timeout oder Netzwerkfehlern nicht zwingend rejecten, 
       // sondern evtl. leeres Ergebnis? 
       // Hier rejecten wir echte Fehler.
@@ -45,6 +50,7 @@ export const scanTarget = (target: string, ports: string): Promise<ScanResult[]>
     });
 
     scanner.on('done', () => {
+      console.log(`Scan auf ${target} abgeschlossen. Funde: ${results.length}`);
       resolve(results);
     });
 

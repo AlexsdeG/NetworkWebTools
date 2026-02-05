@@ -64,7 +64,7 @@ export const ScannerForm: React.FC<ScannerFormProps> = ({
               <Input
                 value={specificPort}
                 onChange={(e) => setSpecificPort(e.target.value)}
-                placeholder="22, 80, 8080"
+                placeholder="22, 80-100, 8080"
                 disabled={isLoading}
                 label="Specific Port"
               />
@@ -77,6 +77,9 @@ export const ScannerForm: React.FC<ScannerFormProps> = ({
               Scan
             </Button>
           </form>
+          <p className="text-xs text-slate-500 italic px-1">
+            {t('scanner.hint')}
+          </p>
         </div>
       </div>
     </div>

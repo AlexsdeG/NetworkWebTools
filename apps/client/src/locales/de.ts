@@ -10,7 +10,7 @@ export const de = {
     loginButton: "Authentifizieren",
     logoutButton: "Sitzung beenden",
     error: "Das eingegebene Passwort ist ungültig.",
-    mockHint: "Prototyp Zugang: 'admin'"
+    info: "Nur für authorisierte Personen"
   },
   nav: {
     dashboard: "Übersicht",
@@ -54,7 +54,8 @@ export const de = {
     },
     toast: {
       success: "Scan abgeschlossen. {{count}} Ports überprüft."
-    }
+    },
+    hint: "Hinweis: Damit ein offener Port erkannt wird, muss ein Dienst darauf hören (z.B. 'nc -l <port>' auf dem Server)."
   },
   ip: {
     title: "IP Informationen",

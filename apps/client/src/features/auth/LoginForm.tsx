@@ -43,7 +43,7 @@ export const LoginForm: React.FC = () => {
         {t('auth.loginButton')}
       </Button>
       <div className="text-center text-xs text-slate-500 mt-4">
-        {t('auth.mockHint')}
+        {t('auth.info')}
       </div>
     </form>
   );

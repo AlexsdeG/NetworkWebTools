@@ -21,6 +21,10 @@ jest.unstable_mockModule('../../src/services/scanService.js', () => ({
     if (target === '127.0.0.1' && ports.includes('80')) {
       return Promise.resolve([{ port: 80, status: 'open', banner: 'MockService' }]);
     }
+    // Simulate closed port response for other cases
+    if (ports === '25560') {
+      return Promise.resolve([{ port: 25560, status: 'closed', banner: '' }]);
+    }
     return Promise.resolve([]);
   })
 }));
