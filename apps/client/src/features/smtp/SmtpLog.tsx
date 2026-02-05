@@ -10,14 +10,15 @@ interface SmtpLogProps {
 
 export const SmtpLog: React.FC<SmtpLogProps> = ({ logs, status }) => {
   const { t } = useTranslation();
+  const safeLogs = logs || []; // Defensive check
 
   return (
     <Card title={t('smtp.logTitle')} className="h-full flex flex-col">
       <div className="flex-1 bg-black/50 rounded-md p-4 font-mono text-sm space-y-2 min-h-[300px] overflow-y-auto border border-slate-800">
-        {logs.length === 0 && (
+        {safeLogs.length === 0 && (
           <div className="text-slate-600 italic">Waiting for connection test...</div>
         )}
-        {logs.map((log, i) => (
+        {safeLogs.map((log, i) => (
           <div key={i} className="text-green-400 animate-in fade-in slide-in-from-left-2 duration-300">
             <span className="text-slate-600 mr-2">{'>'}</span>
             {log}

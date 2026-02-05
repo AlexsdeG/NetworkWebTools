@@ -2,6 +2,7 @@ import React from 'react';
 import { HashRouter, Routes, Route } from 'react-router-dom';
 import { QueryClientProvider } from '@tanstack/react-query';
 import { AuthProvider } from './contexts/AuthContext';
+import { RateLimitProvider } from './contexts/RateLimitContext';
 import { Login } from './pages/Login';
 import { Dashboard } from './pages/Dashboard';
 import { Scanner } from './pages/Scanner';
@@ -14,8 +15,9 @@ import { queryClient } from './lib/queryClient';
 const App: React.FC = () => {
   return (
     <QueryClientProvider client={queryClient}>
-      <AuthProvider>
-        <HashRouter>
+      <RateLimitProvider>
+        <AuthProvider>
+          <HashRouter>
           <Routes>
             <Route path="/login" element={<Login />} />
             
@@ -29,6 +31,7 @@ const App: React.FC = () => {
         </HashRouter>
         <Toaster />
       </AuthProvider>
+      </RateLimitProvider>
     </QueryClientProvider>
   );
 };

@@ -4,6 +4,7 @@ import { useTranslation } from 'react-i18next';
 import { Shield, Globe, Mail, LogOut, LayoutDashboard, Menu, X } from 'lucide-react';
 import { useAuth } from '../../contexts/AuthContext';
 import { Button } from '../ui/Button';
+import { RateLimitTimer } from '../ui/RateLimitTimer';
 
 export const Layout: React.FC = () => {
   const { t } = useTranslation();
@@ -65,6 +66,7 @@ export const Layout: React.FC = () => {
         </nav>
 
         <div className="p-4 border-t border-slate-800">
+          <RateLimitTimer />
           <Button variant="ghost" className="w-full justify-start text-red-400 hover:text-red-300 hover:bg-red-900/20" onClick={logout}>
             <LogOut className="mr-3 h-5 w-5" />
             {t('auth.logoutButton')}

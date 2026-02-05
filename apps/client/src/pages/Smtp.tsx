@@ -55,7 +55,7 @@ export const Smtp: React.FC = () => {
     
     mutate(config, {
       onSuccess: (data) => {
-        setLogs(data.logs); // Replace simulated logs with actual server logs
+        setLogs(data.logs || []); // Replace simulated logs with actual server logs
         setStatus('success');
       },
       onError: (error) => {
