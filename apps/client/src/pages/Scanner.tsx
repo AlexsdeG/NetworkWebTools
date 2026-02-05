@@ -4,6 +4,7 @@ import { Shield } from 'lucide-react';
 import { Card } from '../components/ui/Card';
 import { ScannerForm } from '../features/scanner/ScannerForm';
 import { ResultsGrid } from '../features/scanner/ResultsGrid';
+import { PortKnowledge } from '../features/scanner/PortKnowledge';
 import { useScan } from '../hooks/useScan';
 
 export const Scanner: React.FC = () => {
@@ -44,6 +45,7 @@ export const Scanner: React.FC = () => {
       )}
 
       {data && <ResultsGrid results={data} />}
+      <PortKnowledge />
     </div>
   );
 };
