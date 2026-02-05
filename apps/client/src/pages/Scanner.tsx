@@ -11,8 +11,8 @@ export const Scanner: React.FC = () => {
   const [target, setTarget] = useState('127.0.0.1');
   const { mutate, isPending, data } = useScan();
 
-  const handleScan = (type: string) => {
-    mutate({ target, type });
+  const handleScan = (ports: string) => {
+    mutate({ target, type: ports });
   };
 
   return (

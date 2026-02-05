@@ -36,6 +36,13 @@ NODE_ENV=development
 JWT_SECRET=your_super_secret_key
 ADMIN_PASS_HASH=your_bcrypt_hashed_admin_password
 CORS_ORIGIN=http://localhost:3000
+
+SMTP_HOST=your_smtp_host
+SMTP_PORT=your_smtp_port
+SMTP_USER=your_email
+SMTP_PASS=your_password
+SMTP_FROM=your_email
+SMTP_SECURE=false
 ```
 
 npx bcryptjs hash "your-desired-password"

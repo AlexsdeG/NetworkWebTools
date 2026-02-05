@@ -10,6 +10,10 @@ interface SmtpConfig {
   user: string;
   password?: string;
   secure: boolean;
+  sendEmail?: boolean;
+  to?: string;
+  subject?: string;
+  text?: string;
 }
 
 interface SmtpFormProps {
@@ -79,6 +83,51 @@ export const SmtpForm: React.FC<SmtpFormProps> = ({ config, setConfig, onSubmit,
         <label htmlFor="secure" className="text-sm text-slate-300">
           {t('smtp.secure')}
         </label>
+      </div>
+
+      <div className="pt-4 border-t border-slate-800 space-y-4">
+        <div className="flex items-center space-x-2">
+          <input
+            type="checkbox"
+            id="sendEmail"
+            className="rounded border-slate-700 bg-surface text-primary focus:ring-primary"
+            checked={!!config.sendEmail}
+            onChange={e => setConfig({ ...config, sendEmail: e.target.checked })}
+            disabled={isLoading}
+          />
+          <label htmlFor="sendEmail" className="text-sm font-medium text-white">
+            Send Test Email
+          </label>
+        </div>
+
+        {config.sendEmail && (
+          <div className="space-y-4 pl-4 border-l-2 border-slate-800 animate-in slide-in-from-top-2 duration-200">
+            <Input
+              label="Recipient"
+              value={config.to || ''}
+              onChange={e => setConfig({ ...config, to: e.target.value })}
+              placeholder="recipient@example.com"
+              disabled={isLoading}
+            />
+            <Input
+              label="Subject"
+              value={config.subject || ''}
+              onChange={e => setConfig({ ...config, subject: e.target.value })}
+              placeholder="Test Email Subject"
+              disabled={isLoading}
+            />
+            <div>
+               <label className="block text-sm font-medium text-slate-300 mb-1">Message</label>
+               <textarea 
+                  className="w-full rounded-md border border-slate-700 bg-surface px-3 py-2 text-sm text-white focus:outline-none focus:ring-2 focus:ring-primary disabled:opacity-50"
+                  rows={3}
+                  value={config.text || ''}
+                  onChange={e => setConfig({ ...config, text: e.target.value })}
+                  disabled={isLoading}
+               />
+            </div>
+          </div>
+        )}
       </div>
 
       <Button type="submit" className="w-full mt-4" isLoading={isLoading}>

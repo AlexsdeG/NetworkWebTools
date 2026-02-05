@@ -13,7 +13,11 @@ export const Smtp: React.FC = () => {
     port: '587',
     user: '',
     password: '',
-    secure: false
+    secure: false,
+    sendEmail: false,
+    to: '',
+    subject: '',
+    text: ''
   });
   
   const [logs, setLogs] = useState<string[]>([]);

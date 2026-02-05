@@ -15,7 +15,11 @@ export const smtpSchema = z.object({
   port: z.number().int().min(1).max(65535, "Port muss zwischen 1 und 65535 liegen"),
   user: z.string().optional(),
   pass: z.string().optional(),
-  secure: z.boolean().default(false)
+  secure: z.boolean().default(false),
+  sendEmail: z.boolean().optional(),
+  to: z.string().email().optional(),
+  subject: z.string().optional(),
+  text: z.string().optional()
 });
 
 export type ScanRequest = z.infer<typeof scanSchema>;

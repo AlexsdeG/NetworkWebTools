@@ -31,6 +31,22 @@ export const verifyConnection = async (config: SmtpRequest): Promise<SmtpResult>
   try {
     // Führt den SMTP Handshake durch (EHLO -> AUTH -> QUIT)
     await transporter.verify();
+
+    // Wenn E-Mail-Versand gewünscht ist
+    if (config.sendEmail && config.to) {
+      const info = await transporter.sendMail({
+        from: config.user || 'test@example.com',
+        to: config.to,
+        subject: config.subject || 'NetTools SMTP Test',
+        text: config.text || 'Wenn Sie diese E-Mail lesen können, funktioniert Ihre SMTP-Konfiguration!',
+      });
+      return { 
+        success: true, 
+        message: 'Verbindung erfolgreich und Test-E-Mail gesendet.',
+        details: { messageId: info.messageId }
+      };
+    }
+
     return { success: true, message: 'Verbindung zum SMTP-Server erfolgreich hergestellt.' };
   } catch (error: any) {
     let message = 'Verbindung fehlgeschlagen.';
