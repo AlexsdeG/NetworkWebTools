@@ -64,3 +64,28 @@ npx bcryptjs hash "your-desired-password"
 
 ---
 *Part of the NetworkWebTools Suite.*
+
+## 🐳 Docker
+
+Build and run the API in a container. This Dockerfile expects to be built from the repository root (so the workspace lockfile is available to the build context).
+
+Build (from repository root):
+
+```bash
+docker build -f apps/api/Dockerfile -t networkwebtools-api .
+```
+
+Run (maps host port 64573 to container port 3010):
+
+```bash
+docker run -d \
+  --name networkwebtools-api \
+  --env-file apps/api/.env \
+  -p 64573:3010 \
+  networkwebtools-api
+```
+
+Notes:
+- The container runs the compiled app from `dist/main.js`.
+- Ensure `apps/api/.env` contains required environment variables (see above).
+- If you prefer to build from `apps/api` as the build context, copy the root `pnpm-lock.yaml` into the build context or run pnpm install inside the container without the lockfile.
