@@ -8,6 +8,10 @@ import { env } from '../config/env.js';
  * @returns Ein JWT Token, wenn das Passwort korrekt ist, sonst null.
  */
 export const login = async (password: string): Promise<string | null> => {
+  console.log('Using ADMIN_PASS_HASH:', env.ADMIN_PASS_HASH);
+  console.log('Password to verify:', password, 'hashed:', await bcrypt.hash(password, 10));
+
+  // Passwort-Hash überprüfen
   const isValid = await bcrypt.compare(password, env.ADMIN_PASS_HASH);
   
   if (!isValid) {

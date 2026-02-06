@@ -7,15 +7,31 @@ import { apiLimiter } from './middleware/rateLimit.js';
 
 const app: Application = express();
 
+// If the app is behind a proxy (nginx/load balancer), trust the proxy so
+// Express and middleware like express-rate-limit can read the correct client IP
+// from the `X-Forwarded-For` header. Set to `true` to trust the first proxy.
+app.set('trust proxy', true);
+
 // Sicherheits-Middleware
 // Fix: Cast middleware to any to satisfy Express types
 app.use(helmet() as any);
 
 // CORS Konfiguration (Erlaubt Frontend Zugriff)
+// Parse allowed origins from env (comma-separated) and validate at runtime so
+// the server responds with a single matching Access-Control-Allow-Origin value.
+const rawCors = process.env.CORS_ORIGIN || 'http://localhost:3000';
+const allowedOrigins = rawCors.split(',').map(s => s.trim()).filter(Boolean);
+
 app.use(cors({
-  origin: process.env.CORS_ORIGIN || 'http://localhost:3000',
+  origin: (origin: string | undefined, callback: (err: Error | null, allow?: boolean) => void) => {
+    // Allow non-browser requests (e.g., curl, server-to-server) with no Origin
+    if (!origin) return callback(null, true);
+    if (allowedOrigins.includes(origin)) return callback(null, true);
+    return callback(new Error('Not allowed by CORS'));
+  },
   methods: ['GET', 'POST', 'PUT', 'DELETE'],
-  allowedHeaders: ['Content-Type', 'Authorization']
+  allowedHeaders: ['Content-Type', 'Authorization'],
+  credentials: true
 }) as any);
 
 // Rate Limiting global für alle API Routen

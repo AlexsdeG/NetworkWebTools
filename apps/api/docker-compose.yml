@@ -1,0 +1,19 @@
+version: '3.9'
+
+services:
+  api:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    image: networkwebtools-api:latest
+    env_file:
+      - .env
+    ports:
+      - "64573:3010" # host:container
+    restart: unless-stopped
+    networks:
+      - nwtools_net
+
+networks:
+  nwtools_net:
+    driver: bridge
