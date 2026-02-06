@@ -2,6 +2,8 @@
 
 A modern, monorepo-based suite of network and diagnostic tools. This project includes a full-stack application featuring a React frontend and an Express backend.
 
+![App Screenshot](https://github.com/AlexsdeG/NetworkWebTools/blob/main/NetworkWebTools.png)
+
 ## 🚀 Projects
 
 - **[Client (Frontend)](./apps/client)**: A sleek, React-based dashboard for interactive network diagnostics.
